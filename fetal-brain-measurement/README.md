@@ -66,6 +66,8 @@ Example: `Pat12345_Se1_Res0.5_0.5_Spac3.0.nii.gz`
 - `report.pdf` - Clinical report with measurements and plots
 - Various PNG plots showing measurement locations
 
+**📄 Example Output**: View a [sample report.pdf](output/new_data_first/WORKING_GOOD-Pat13249_Se8_Res0.46875_0.46875_Spac4.0/report.pdf) showing the complete measurement results, normative percentile graphs, and annotated anatomical images.
+
 ### Mode 2: OpenRecon Integration (MRI Deployment)
 
 Deploy to Siemens MRI systems using OpenRecon framework:

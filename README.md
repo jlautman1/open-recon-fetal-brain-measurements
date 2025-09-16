@@ -162,11 +162,17 @@ The pipeline can be configured through:
 ## 📊 Output
 
 The pipeline generates:
-- **Measurements**: CBD, BBD, TCD in millimeters
-- **Gestational age**: Estimated from measurements
+- **Measurements**: CBD, BBD, TCD in millimeters with confidence scores
+- **Gestational age**: Estimated from measurements with normative percentiles
 - **Brain volume**: Total brain volume in mm³
-- **Segmentation masks**: Brain structure segmentation
-- **Reports**: PDF reports with visualizations
+- **Segmentation masks**: Brain structure segmentation (NIfTI format)
+- **Visualizations**: Annotated measurement images (CBD.png, BBD.png, TCD.png)
+- **📄 Clinical Reports**: Comprehensive PDF reports with:
+  - Measurement values and confidence intervals
+  - Normative percentile graphs 
+  - Annotated anatomical images
+  - Quality assessment metrics
+- **📄 Example Report**: [View sample output](fetal-brain-measurement/output/new_data_first/WORKING_GOOD-Pat13249_Se8_Res0.46875_0.46875_Spac4.0/report.pdf)
 
 ## 🤝 Contributing
 
@@ -231,7 +237,8 @@ The pipeline generates:
 - **Segmentation**: Brain structure masks in NIfTI format
 - **Visualizations**: Annotated slice images (CBD.png, BBD.png, TCD.png)
 - **Report**: Comprehensive PDF report with normative percentile graphs
-- **Sample Report**: See `fetal-brain-measurement/output/` for example outputs
+- **📄 Sample Report**: [Example PDF Report](fetal-brain-measurement/output/new_data_first/WORKING_GOOD-Pat13249_Se8_Res0.46875_0.46875_Spac4.0/report.pdf)
+- **📁 More Examples**: Browse `fetal-brain-measurement/output/` for multiple example outputs
 
 ## 🚀 MRI Magnet Deployment Guide
 
