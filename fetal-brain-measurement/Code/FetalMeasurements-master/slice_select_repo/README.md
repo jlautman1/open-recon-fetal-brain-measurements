@@ -1,3 +1,0 @@
-# research
-
-Scripts and awesome

@@ -158,9 +158,11 @@ This pipeline integrates multiple components:
 
 ## 📚 Documentation
 
-- `fetal-brain-measurement/README.md` - Core pipeline documentation
-- `fetal-brain-measurement/DEPLOYMENT_GUIDE.md` - OpenRecon deployment
-- `python-ismrmrd-server/readme.md` - Server framework documentation
+- **[Local Pipeline Guide](fetal-brain-measurement/README.md)** - Complete local NIfTI processing documentation
+- **[OpenRecon Technical Guide](fetal-brain-measurement/README.openrecon.md)** - Detailed OpenRecon integration and architecture
+- **[OpenRecon Deployment Guide](fetal-brain-measurement/DEPLOYMENT_GUIDE.md)** - Step-by-step MRI deployment process
+- **[Server Framework Docs](python-ismrmrd-server/readme.md)** - ISMRMRD server development documentation
+- **[ISMRMRD Tools Docs](ismrmrd-python-tools/README.md)** - ISMRMRD utilities and tools reference
 
 ## 🏥 Clinical Integration
 
@@ -259,7 +261,9 @@ For complete deployment instructions including:
 - Troubleshooting and validation
 - Production deployment checklist
 
-See: [OpenRecon Deployment Guide](fetal-brain-measurement/DEPLOYMENT_GUIDE.md)
+See: 
+- [OpenRecon Deployment Guide](fetal-brain-measurement/DEPLOYMENT_GUIDE.md) - Step-by-step deployment process
+- [OpenRecon Technical Documentation](fetal-brain-measurement/README.openrecon.md) - Detailed technical integration guide
 
 ## 📄 License
 
