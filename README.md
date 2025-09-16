@@ -9,25 +9,45 @@ This repository contains a complete pipeline for automated fetal brain measureme
 ## 🏗️ Architecture
 
 ```
-MRI Scanner → ISMRMRD Data → OpenRecon Server → AI Pipeline → Results
+MRI Scanner → DICOM → ISMRMRD → OpenRecon Server → NIfTI → AI Pipeline → NIfTI Results → ISMRMRD → DICOM → MRI Scanner
+     ↑                                                ↓                    ↓                           ↓                    ↑
+     │                                             Convert              Process               Convert Back            │
+     │                                          (ISMRMRD→NIfTI)     (Measurements)         (NIfTI→ISMRMRD)        │
+     └─────────────────────────────── Results delivered back to clinician ──────────────────────────────────────┘
 ```
+
+### Detailed Data Flow:
+
+1. **🏥 MRI Scanner** → Acquires raw k-space data
+2. **📄 DICOM** → Standard medical imaging format from scanner  
+3. **🔄 ISMRMRD** → Standardized raw data format for reconstruction
+4. **🖥️ OpenRecon Server** → Receives ISMRMRD data, manages processing
+5. **🔄 NIfTI Conversion** → Convert ISMRMRD images to NIfTI format for AI processing
+6. **🧠 AI Pipeline** → Fetal brain segmentation and measurement algorithms
+7. **📊 NIfTI Results** → Processed images with measurements and segmentations
+8. **🔄 ISMRMRD Conversion** → Convert results back to ISMRMRD format
+9. **📄 DICOM Output** → Convert to DICOM with embedded measurements
+10. **🏥 Back to MRI** → Results displayed on MRI console for clinician
 
 ### Key Components:
 
 - **`fetal-brain-measurement/`** - Core fetal brain AI pipeline with measurement algorithms
-- **`python-ismrmrd-server/`** - OpenRecon server framework for MRI integration
-- **`nifti_to_ismrmrd_converter.py`** - Format conversion utilities
-- **`OpenRecon.dockerfile`** - Container deployment configuration
-- **`ismrmrd-python-tools/`** - ISMRMRD utilities and tools
+- **`python-ismrmrd-server/`** - OpenRecon server framework for MRI integration  
+- **`nifti_to_ismrmrd_converter.py`** - Bidirectional format conversion (NIfTI ↔ ISMRMRD)
+- **`fetal-brain-measurement/openrecon.py`** - OpenRecon i2i handler with format conversions
+- **`ismrmrd-python-tools/`** - ISMRMRD utilities and reconstruction tools
+- **`OpenRecon.dockerfile`** - Complete container for clinical deployment
 
 ## 🚀 Features
 
 - ✅ **Real-time processing** - Direct integration with MRI scanners
 - ✅ **Automated measurements** - CBD, BBD, TCD, gestational age estimation
 - ✅ **Brain volume calculation** - 3D volumetric analysis
-- ✅ **ISMRMRD compatibility** - Standard medical imaging format
+- ✅ **Seamless format conversion** - DICOM → ISMRMRD → NIfTI → ISMRMRD → DICOM
+- ✅ **ISMRMRD compatibility** - Standard medical imaging format with bidirectional conversion
+- ✅ **Clinical integration** - Results embedded back into MRI workflow
 - ✅ **Docker deployment** - Containerized for easy deployment
-- ✅ **OpenRecon integration** - Works with Siemens MRI systems
+- ✅ **OpenRecon integration** - Full Siemens MRI system compatibility
 
 ## 📋 Requirements
 
