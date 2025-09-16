@@ -43,19 +43,60 @@ MRI Scanner → ISMRMRD Data → OpenRecon Server → AI Pipeline → Results
 - NiBabel for medical imaging
 - NumPy, SciPy for numerical processing
 
-## 🐳 Docker Deployment
+## 🐳 Docker Images
+
+This project uses multiple Docker images for different purposes:
+
+### 1. **Base Fetal Brain Pipeline** (Ready on DockerHub)
+```bash
+# Pull the working fetal brain measurement pipeline
+docker pull jlautman1/fetal-pipeline-gpu-rebuilt:latest
+```
+**Purpose**: Local fetal brain measurement processing  
+**Contains**: Complete AI pipeline, models, dependencies  
+**Use case**: Research, development, local NIfTI processing  
+
+### 2. **OpenRecon Integration Image** (Build from source)
+```bash
+# Build the complete OpenRecon-enabled container
+docker build -f fetal-brain-measurement/Dockerfile.openrecon \
+  -t openrecon-fetal-brain:latest .
+
+# Or use the comprehensive build
+docker build -f OpenRecon.dockerfile -t openrecon-fetal-complete:latest .
+```
+**Purpose**: Clinical deployment on Siemens MRI systems  
+**Contains**: Fetal pipeline + OpenRecon server + ISMRMRD tools  
+**Use case**: Real-time MRI processing, clinical deployment  
+
+### 3. **Development Server** (Build from source)  
+```bash
+# Build the python-ismrmrd-server for development
+cd python-ismrmrd-server
+docker build -t python-ismrmrd-server:latest .
+```
+**Purpose**: OpenRecon development and testing  
+**Contains**: ISMRMRD server framework, development tools  
+**Use case**: Development, testing OpenRecon handlers  
 
 ### Quick Start:
 ```bash
-# Build the OpenRecon container
-docker build -f OpenRecon.dockerfile -t openrecon-fetal:latest .
+# For local pipeline testing:
+docker pull jlautman1/fetal-pipeline-gpu-rebuilt:latest
+docker run --gpus all -it jlautman1/fetal-pipeline-gpu-rebuilt:latest
 
-# Run the server
+# For OpenRecon deployment:
+docker build -f OpenRecon.dockerfile -t openrecon-fetal:latest .
 docker run -p 9002:9002 openrecon-fetal:latest
 ```
 
-### For MRI Integration:
-The container is designed to be deployed on Siemens OpenRecon systems. See the deployment guides in `fetal-brain-measurement/` for detailed instructions.
+### Docker Image Hierarchy:
+```
+nvidia/cuda:11.0.3-cudnn8-runtime-ubuntu18.04
+└── jlautman1/fetal-pipeline-gpu-rebuilt:latest (Base pipeline)
+    └── openrecon-fetal-brain:latest (+ OpenRecon integration)
+        └── openrecon-fetal-complete:latest (+ ISMRMRD tools)
+```
 
 ## 🧪 Testing
 
@@ -133,6 +174,92 @@ This pipeline is designed for integration with clinical MRI workflows:
 
 - [ISMRMRD](https://ismrmrd.github.io/) - Medical imaging data standard
 - [OpenRecon](https://openrecon.ismrmrd.org/) - Siemens reconstruction framework
+- [Fetal Brain Measurement (Local Pipeline)](https://github.com/jlautman1/fetal-brain-measurement) - Original local-only fetal brain measurement pipeline
+
+## 🧪 Running the Local Pipeline on NIfTI Input
+
+For running just the local fetal brain measurement pipeline on NIfTI files (without OpenRecon integration):
+
+### Quick Start with Docker:
+```bash
+# Pull the pre-built fetal brain pipeline image
+docker pull jlautman1/fetal-pipeline-gpu-rebuilt:latest
+
+# Run the pipeline on your NIfTI file
+docker run --gpus all -it \
+  -v "/path/to/your/data:/workspace/fetal-brain-measurement" \
+  jlautman1/fetal-pipeline-gpu-rebuilt:latest bash
+
+# Inside the container, run the pipeline:
+python3 /workspace/fetal-brain-measurement/Code/FetalMeasurements-master/execute.py \
+  -i /workspace/fetal-brain-measurement/Inputs/Fixed \
+  -o /workspace/fetal-brain-measurement/output
+```
+
+### Detailed Instructions:
+See the [complete local pipeline guide](fetal-brain-measurement/README.md) for:
+- Input data preparation
+- Parameter configuration  
+- Output interpretation
+- Example reports and visualizations
+
+### Example Output:
+The pipeline generates:
+- **Measurements**: CBD, BBD, TCD values with confidence scores
+- **Segmentation**: Brain structure masks in NIfTI format
+- **Visualizations**: Annotated slice images (CBD.png, BBD.png, TCD.png)
+- **Report**: Comprehensive PDF report with normative percentile graphs
+- **Sample Report**: See `fetal-brain-measurement/output/` for example outputs
+
+## 🚀 MRI Magnet Deployment Guide
+
+### Prerequisites:
+1. Siemens OpenRecon-compatible MRI system
+2. Docker support on the MRI host system
+3. Network access for Docker image deployment
+
+### Deployment Steps:
+
+#### 1. Build the OpenRecon Container:
+```bash
+# Pull the required base images
+docker pull jlautman1/fetal-pipeline-gpu-rebuilt:latest
+
+# Build the OpenRecon-enabled container
+docker build -f fetal-brain-measurement/Dockerfile.openrecon \
+  -t openrecon-fetal-brain:latest .
+```
+
+#### 2. Package for MRI Deployment:
+```bash
+# Save the Docker image as a tar file
+docker save openrecon-fetal-brain:latest -o openrecon-fetal-brain.tar
+
+# Transfer to MRI system (via USB, network, etc.)
+# Load on the MRI system:
+docker load -i openrecon-fetal-brain.tar
+```
+
+#### 3. Configure OpenRecon:
+- Copy `fetal-brain-measurement/openrecon.json` to the OpenRecon configuration directory
+- Verify the image runs: `docker run -p 9002:9002 openrecon-fetal-brain:latest`
+- Test with sample ISMRMRD data using the provided test scripts
+
+#### 4. Integration Testing:
+```bash
+# Test the complete integration
+python test_complete_pipeline.py
+python test_openrecon_pipeline.py
+```
+
+### Detailed MRI Deployment:
+For complete deployment instructions including:
+- OpenRecon system configuration
+- Network setup and security considerations  
+- Troubleshooting and validation
+- Production deployment checklist
+
+See: [OpenRecon Deployment Guide](fetal-brain-measurement/DEPLOYMENT_GUIDE.md)
 
 ## 📄 License
 
