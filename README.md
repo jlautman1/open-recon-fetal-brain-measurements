@@ -172,7 +172,7 @@ The pipeline generates:
   - Normative percentile graphs 
   - Annotated anatomical images
   - Quality assessment metrics
-- **📄 Example Report**: [View sample output](fetal-brain-measurement/output/new_data_first/WORKING_GOOD-Pat13249_Se8_Res0.46875_0.46875_Spac4.0/report.pdf)
+- **📄 Example Report**: [View sample output](fetal-brain-measurement/output/Pat13249_Se8_Res0.46875_0.46875_Spac4.0/report.pdf)
 
 ## 🤝 Contributing
 
