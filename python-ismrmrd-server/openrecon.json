@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "description": "Fetal brain measurement configuration for OpenRecon MRD server - AI-based measurements with clinical reporting",
+    "parameters": {
+        "processRawData": "true",
+        "processImageData": "true", 
+        "debugOutput": "true",
+        "enableMeasurements": "true",
+        "outputDirectory": "/tmp/share/fetal_measurements",
+        "modelName": "model-tfms"
+    },
+    "measurement_settings": {
+        "CBD_enabled": "true",
+        "BBD_enabled": "true", 
+        "TCD_enabled": "true"
+    },
+    "output_settings": {
+        "embed_results_in_dicom": "true",
+        "create_secondary_captures": "true",
+        "create_structured_reports": "true"
+    },
+    "clinical_settings": {
+        "include_gestational_age": "true",
+        "include_brain_volume": "true",
+        "include_normative_plots": "true"
+    }
+}

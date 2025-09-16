@@ -1,0 +1,59 @@
+# ------------------------------------------------------------
+#  OpenRecon Fetal Brain Segmentation Pipeline
+#  Based on WORKING jlautman1/fetal-pipeline-gpu-rebuilt image
+#  Adds OpenRecon integration on top of working dependencies
+# ------------------------------------------------------------
+FROM jlautman1/fetal-pipeline-gpu-rebuilt:latest
+
+# Set working directory
+WORKDIR /workspace
+
+# Install ISMRMRD tools for OpenRecon integration
+RUN python -m pip install --no-cache-dir \
+    h5py \
+    xmltodict \
+    ismrmrd
+
+# Copy the complete fetal brain measurement code including Normative.csv
+COPY fetal-brain-measurement/Code/ /workspace/fetal-brain-measurement/Code/
+
+# Copy the AI models that are missing from the base image
+COPY fetal-brain-measurement/Models/ /workspace/fetal-brain-measurement/Models/
+
+# Copy the test input data
+COPY fetal-brain-measurement/Inputs/ /workspace/fetal-brain-measurement/Inputs/
+
+# Copy python-ismrmrd-server for OpenRecon
+COPY python-ismrmrd-server/ /opt/code/python-ismrmrd-server/
+
+# Copy OpenRecon handler files to the server directory
+COPY fetal-brain-measurement/openrecon.py /opt/code/python-ismrmrd-server/
+COPY fetal-brain-measurement/openrecon.json /opt/code/python-ismrmrd-server/
+
+# Set PYTHONPATH to include all necessary paths
+ENV PYTHONPATH="/workspace/fetal-brain-measurement:/workspace/fetal-brain-measurement/Code/FetalMeasurements-master:/workspace/fetal-brain-measurement/Code/FetalMeasurements-master/SubSegmentation:/opt/code/python-ismrmrd-server"
+
+# Test that the fetal brain pipeline works (this should work since we're using the working base image)
+RUN cd /workspace/fetal-brain-measurement && \
+    python3 Code/FetalMeasurements-master/execute.py --help && \
+    echo "✅ Fetal brain pipeline is accessible"
+
+# Test that OpenRecon import works
+RUN cd /opt/code/python-ismrmrd-server && \
+    python -c "import openrecon; print('✅ OpenRecon handler imported successfully')"
+
+# Create shared output directory for measurements
+RUN mkdir -p /tmp/share/fetal_measurements
+
+# Set working directory to OpenRecon server
+WORKDIR /opt/code/python-ismrmrd-server
+
+# Health check to ensure server is responsive
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import socket; s=socket.socket(); s.connect(('localhost', 9002)); s.close()" || exit 1
+
+# Expose the OpenRecon port
+EXPOSE 9002
+
+# Default command to run OpenRecon server with fetal brain handler
+CMD ["python", "main.py", "-v", "-d=openrecon"]

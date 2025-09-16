@@ -1,0 +1,99 @@
+# OpenRecon Fetal Brain Segmentation Pipeline .gitignore
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+.env
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.eggk 
+
+# Virtual environments
+fetal-brain-measurement/Code/fetalenv/
+fetalenv/
+.conda/
+
+# Output directories and generated files (but keep sample outputs)
+/output/
+/output_*/
+/results/
+temp_*/
+deployment_package_*/
+
+# Large binary files (but keep models)
+*.pkl
+*.tar
+*.zip
+# *.gz files are now allowed - removed to include .nii.gz and other important files
+
+# Specific large files to ignore
+fetal_brain_ismrmrd_output.h5
+fetal_brain_ismrmrd_output.txt
+test_fetal_brain_pipeline.h5
+test_fetal_brain.h5
+test_ismrmrd_output.pkl
+temp_input_for_pipeline.nii.gz
+
+# DICOM files (too large for git)
+*.dcm
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Testing artifacts
+testing/fetal_brain_images*.h5
+testing/fetal_result.h5
+
+# Build artifacts from ismrmrd-python-tools
+ismrmrd-python-tools/build/
+ismrmrd-python-tools/dist/
+ismrmrd-python-tools/*.egg-info/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows specific
+*.lnk
+
+# Keep important sample data
+!fetal-brain-measurement/Inputs/Fixed/*.nii.gz
+
+# Documentation and deployment
+*.pdf (except documentation)
+!README*.md
+!*.md
+!DEPLOYMENT_GUIDE.md

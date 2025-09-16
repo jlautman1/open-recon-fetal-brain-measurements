@@ -1,0 +1,6 @@
+[submodule "fetal_segmentation"]
+	path = fetal_segmentation
+	url = https://github.com/Bella31/fetal_mr
+[submodule "slice_select_repo"]
+	path = slice_select_repo
+	url = https://gitlab.com/netanell/research.git/
