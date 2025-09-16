@@ -8,26 +8,65 @@ This repository contains a complete pipeline for automated fetal brain measureme
 
 ## 🏗️ Architecture
 
+### 📡 Complete Clinical Integration Pipeline
+
 ```
-MRI Scanner → DICOM → ISMRMRD → OpenRecon Server → NIfTI → AI Pipeline → NIfTI Results → ISMRMRD → DICOM → MRI Scanner
-     ↑                                                ↓                    ↓                           ↓                    ↑
-     │                                             Convert              Process               Convert Back            │
-     │                                          (ISMRMRD→NIfTI)     (Measurements)         (NIfTI→ISMRMRD)        │
-     └─────────────────────────────── Results delivered back to clinician ──────────────────────────────────────┘
+                   🏥 MRI SCANNER
+                         │
+                         ▼
+                   📄 DICOM Images
+                         │
+                         ▼
+                   🔄 ISMRMRD Data
+                         │
+                         ▼
+            ┌────────────────────────────┐
+            │    🖥️ OpenRecon Server     │
+            │  ┌──────────────────────┐  │
+            │  │                      │  │
+            │  │  📥 Receive ISMRMRD  │  │
+            │  │         ↓            │  │
+            │  │  🔄 Convert to NIfTI │  │
+            │  │         ↓            │  │
+            │  │    🧠 AI Pipeline    │  │
+            │  │  • Brain Detection   │  │
+            │  │  • Segmentation     │  │
+            │  │  • Measurements     │  │
+            │  │         ↓            │  │
+            │  │  🔄 Convert to ISMRMRD │ │
+            │  │         ↓            │  │
+            │  │  📤 Send Results     │  │
+            │  └──────────────────────┘  │
+            └────────────────────────────┘
+                         │
+                         ▼
+                   📄 DICOM + Results
+                         │
+                         ▼
+            👩‍⚕️ CLINICIAN CONSOLE
+            📊 Real-time Measurements
 ```
 
-### Detailed Data Flow:
+### 🔄 Data Flow Stages
 
-1. **🏥 MRI Scanner** → Acquires raw k-space data
-2. **📄 DICOM** → Standard medical imaging format from scanner  
-3. **🔄 ISMRMRD** → Standardized raw data format for reconstruction
-4. **🖥️ OpenRecon Server** → Receives ISMRMRD data, manages processing
-5. **🔄 NIfTI Conversion** → Convert ISMRMRD images to NIfTI format for AI processing
-6. **🧠 AI Pipeline** → Fetal brain segmentation and measurement algorithms
-7. **📊 NIfTI Results** → Processed images with measurements and segmentations
-8. **🔄 ISMRMRD Conversion** → Convert results back to ISMRMRD format
-9. **📄 DICOM Output** → Convert to DICOM with embedded measurements
-10. **🏥 Back to MRI** → Results displayed on MRI console for clinician
+| Stage | Component | Input | Output | Purpose |
+|-------|-----------|-------|---------|---------|
+| **1** | 🏥 **MRI Scanner** | Raw k-space | DICOM | Image acquisition |
+| **2** | 📄 **DICOM → ISMRMRD** | DICOM files | ISMRMRD format | Standardization |
+| **3** | 🖥️ **OpenRecon Server** | ISMRMRD data | Processing trigger | Workflow management |
+| **4** | 🔄 **Format Converter** | ISMRMRD | NIfTI volume | AI-compatible format |
+| **5** | 🧠 **AI Pipeline** | NIfTI volume | Measurements + masks | Brain analysis |
+| **6** | 🔄 **Result Converter** | NIfTI results | ISMRMRD format | Clinical integration |
+| **7** | 📄 **ISMRMRD → DICOM** | ISMRMRD + data | Enhanced DICOM | Standard output |
+| **8** | 👩‍⚕️ **Clinical Display** | Enhanced DICOM | Visual results | Immediate feedback |
+
+### ⚡ Real-Time Processing Features
+
+- **🚀 Sub-minute processing** - Complete analysis in <60 seconds
+- **🔄 Seamless integration** - No workflow disruption  
+- **📊 Immediate results** - Real-time display on MRI console
+- **🧠 AI-powered accuracy** - Deep learning measurement algorithms
+- **📈 Clinical validation** - Normative percentile comparisons
 
 ### Key Components:
 
